@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16
+    container_name: agregador-de-investimento
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=c
+      - POSTGRES_PASSWORD=root123
+      - POSTGRES_DB=db_investimentos
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_investimentos
+      
+volumes:
+  db_data: 
