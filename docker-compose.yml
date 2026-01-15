@@ -5,7 +5,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=c
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root123
       - POSTGRES_DB=db_investimentos
     volumes:
@@ -19,6 +19,8 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_investimentos
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root123
       
 volumes:
-  db_data: 
+  db_data:
