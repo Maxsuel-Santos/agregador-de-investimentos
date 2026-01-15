@@ -1,6 +1,7 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class UserService {
         log.info("User created with ID: {}", userSaved.getUserId());
 
         return userSaved.getUserId();
+    }
+
+    public Optional<User> getUserById(String userId) {
+        return userRepository.findById(UUID.fromString(userId));
     }
 
 }
