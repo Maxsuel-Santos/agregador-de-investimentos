@@ -40,4 +40,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public void deleteUser(String userId) {
+        var userUuid = UUID.fromString(userId);
+
+        var userExists = userRepository.existsById(userUuid);
+
+        if (userExists) {
+            userRepository.deleteById(userUuid);
+            log.info("User deleted with ID: {}", userId);
+        } else {
+            log.warn("Attempted to delete non-existing user with ID: {}", userId);
+        }
+    }
+
 }
