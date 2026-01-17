@@ -197,4 +197,34 @@ public class UserServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("Tests for Deleting User")
+    public class DeleteUser {
+
+        @Test
+        @DisplayName("Should delete user with success when it exists")
+        public void shouldDeleteUserWithSuccessWhenItExists() {
+            // Arrange
+            doReturn(true)
+                    .when(userRepository)
+                    .existsById(uuidArgumentCaptor.capture());
+
+            doNothing()
+                    .when(userRepository)
+                    .deleteById(uuidArgumentCaptor.capture());
+            
+            var userId = UUID.randomUUID();
+
+            // Act
+            userService.deleteUser(userId.toString());
+
+            // Assert
+            var idList = uuidArgumentCaptor.getAllValues();
+
+            assertEquals(userId, idList.get(0));
+            assertEquals(userId, idList.get(1));
+
+        }
+    }
+
 }
