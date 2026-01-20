@@ -2,13 +2,7 @@ package github.maxsuel.agregadordeinvestimentos.entity;
 
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +20,7 @@ public class BillingAddress {
     @Column(name = "account_id", nullable = false, unique = true)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
@@ -36,5 +30,7 @@ public class BillingAddress {
 
     @Column(name = "number", nullable = false)
     private Integer number;
- 
+
+
+
 }
