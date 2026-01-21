@@ -31,6 +31,4 @@ public class BillingAddress {
     @Column(name = "number", nullable = false)
     private Integer number;
 
-
-
 }
