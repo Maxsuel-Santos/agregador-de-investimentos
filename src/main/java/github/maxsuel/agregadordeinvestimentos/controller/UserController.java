@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + userId.toString())).build();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(path = "/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
         var user = userService.getUserById(userId);
 

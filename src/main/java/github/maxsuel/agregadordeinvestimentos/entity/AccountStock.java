@@ -8,12 +8,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "account_stocks")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class AccountStock {
     
     @EmbeddedId
