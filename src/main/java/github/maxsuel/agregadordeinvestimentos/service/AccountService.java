@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -49,6 +50,7 @@ public class AccountService {
         accountStockRepository.save(entity);
     }
 
+    @CircuitBreaker(name = "brapiService", fallbackMethod = "fallbackListStocks")
     public List<AccountStockResponseDto> listAllStocks(String accountId) {
         var account = accountRepository.findById(UUID.fromString(accountId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -76,5 +78,11 @@ public class AccountService {
                     );
                 })
                 .toList();
+    }
+
+    public List<AccountStockResponseDto> fallbackListStocks(String accountId, Throwable t) {
+        return List.of(new AccountStockResponseDto(
+                "N/A", "Service unavailable", 0, 0.0, 0.0, ""
+        ));
     }
 }
