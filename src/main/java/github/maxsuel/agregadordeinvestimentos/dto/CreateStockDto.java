@@ -1,5 +1,12 @@
 package github.maxsuel.agregadordeinvestimentos.dto;
 
-public record CreateStockDto(String stockId, String description) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record CreateStockDto(
+        @Schema(description = "Stock ticker", example = "PETR4")
+        String stockId,
+        @Schema(description = "Company name", example = "Petróleo Brasileiro S.A.")
+        String description
+) {
 
 }
