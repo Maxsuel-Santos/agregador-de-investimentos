@@ -9,8 +9,10 @@ import github.maxsuel.agregadordeinvestimentos.dto.AccountResponseDto;
 import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
 import github.maxsuel.agregadordeinvestimentos.entity.Account;
 import github.maxsuel.agregadordeinvestimentos.entity.BillingAddress;
+import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
 import github.maxsuel.agregadordeinvestimentos.repository.AccountRepository;
 import github.maxsuel.agregadordeinvestimentos.repository.BillingAddressRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
@@ -28,21 +30,22 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final AccountRepository accountRepository;
-
     private final BillingAddressRepository billingAddressRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UUID createUser(CreateUserDto createUserDto) {
         var entity = new User(
             createUserDto.username(), 
-            createUserDto.email(), 
-            createUserDto.password()); 
+            createUserDto.email(),
+            passwordEncoder.encode(createUserDto.password()),
+            Role.BASIC
+        );
 
         var userSaved = userRepository.save(entity);
 
-        log.info("User created with ID: {}", userSaved.getUserId());
+        log.info("User created with ID: {} and type {}", userSaved.getUserId(), userSaved.getRole());
 
         return userSaved.getUserId();
     }

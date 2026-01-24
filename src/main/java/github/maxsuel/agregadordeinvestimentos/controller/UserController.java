@@ -3,12 +3,16 @@ package github.maxsuel.agregadordeinvestimentos.controller;
 import java.net.URI;
 import java.util.List;
 
-import github.maxsuel.agregadordeinvestimentos.dto.AccountResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
+import github.maxsuel.agregadordeinvestimentos.config.TokenService;
+import github.maxsuel.agregadordeinvestimentos.dto.*;
+import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
+import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
-import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,9 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Operation(summary = "Create a new user.")
     @ApiResponse(responseCode = "201", description = "User created successfully.")
@@ -91,6 +96,25 @@ public class UserController {
         var accounts = userService.listAllAccounts(userId);
 
         return ResponseEntity.ok(accounts);
+    }
+
+    @Operation(summary = "Log in and receive the JWT token.",
+               description = "Validates credentials and generates a Bearer token to authenticate subsequent requests.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Login successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid username or password")
+    })
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        var user = userRepository.findByUsername(loginDto.username())
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        if (passwordEncoder.matches(loginDto.password(), user.getPassword())) {
+            var token = tokenService.generateToken(user);
+            return ResponseEntity.ok(token);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }
