@@ -1,8 +1,8 @@
-# Código de Conduta do Finncker
+# Código de Conduta
 
 ## Nosso Compromisso
 
-Como colaboradores e mantenedores do projeto **Finncker**, comprometemo-nos a tornar a participação em nossa comunidade uma experiência livre de assédio para todos, independentemente da aparência física, deficiência, idade, etnia, identidade e expressão de gênero, nível de experiência, nacionalidade, orientação sexual, raça ou religião.
+Como colaboradores e mantenedores do projeto **Agregador de Investimentos**, comprometemo-nos a tornar a participação em nossa comunidade uma experiência livre de assédio para todos, independentemente da aparência física, deficiência, idade, etnia, identidade e expressão de gênero, nível de experiência, nacionalidade, orientação sexual, raça ou religião.
 
 ## Nossos Padrões
 
@@ -34,7 +34,7 @@ Este Código de Conduta aplica-se tanto dentro dos espaços do projeto quanto em
 
 ## Aplicação
 
-Instâncias de comportamento abusivo, de assédio ou inaceitável podem ser reportadas entrando em contato com a equipe do projeto em `contato@finncker.com`. Todas as queixas serão revisadas e investigadas e resultarão em uma resposta necessária e apropriada à situação. A equipe do projeto manterá a confidencialidade em relação ao relator de um incidente.
+Instâncias de comportamento abusivo, de assédio ou inaceitável podem ser reportadas entrando em contato com a equipe do projeto. Todas as queixas serão revisadas e investigadas e resultarão em uma resposta necessária e apropriada à situação. A equipe do projeto manterá a confidencialidade em relação ao relator de um incidente.
 
 ## Atribuição
 
