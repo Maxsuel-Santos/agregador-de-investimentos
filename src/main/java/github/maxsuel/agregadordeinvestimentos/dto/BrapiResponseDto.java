@@ -1,12 +1,24 @@
 package github.maxsuel.agregadordeinvestimentos.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.List;
 
-public record BrapiResponseDto(
-        @Schema(description = "List of results returned by the external API.")
-        List<StockDto> results
-) {
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Response returned by the Brapi external API containing stock data")
+public record BrapiResponseDto(
+
+    @Schema(
+        description = "List of stock results returned by the external API",
+        example = """
+        [
+          {
+            "stockId": "PETR4",
+            "name": "Petrobras",
+            "price": 37.50
+          }
+        ]
+        """
+    )
+    List<StockDto> results
+) {
 }
