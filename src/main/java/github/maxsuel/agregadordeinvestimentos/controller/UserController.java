@@ -8,6 +8,7 @@ import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class UserController {
     @Operation(summary = "Create a new user.")
     @ApiResponse(responseCode = "201", description = "User created successfully.")
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDto createUserDto) {
         var userId = userService.createUser(createUserDto);
         return ResponseEntity.created(URI.create("/users/" + userId.toString())).build();
     }
@@ -64,7 +65,7 @@ public class UserController {
     })
     @PutMapping(path = "/{userId}")
     public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
-                                               @RequestBody UpdateUserDto updateUserDto) {
+                                               @Valid @RequestBody UpdateUserDto updateUserDto) {
         userService.updateUserById(userId, updateUserDto);
         return ResponseEntity.noContent().build();
     }
@@ -80,7 +81,7 @@ public class UserController {
     @Operation(summary = "Create an account for the user.", description = "Opens a new investment portfolio associated with the user and sets the billing address.")
     @PostMapping(path = "/{userId}/accounts")
     public ResponseEntity<Void> createAccount(@PathVariable("userId") String userId,
-                                              @RequestBody CreateAccountDto createAccountDto) {
+                                              @Valid @RequestBody CreateAccountDto createAccountDto) {
         userService.createAccount(userId, createAccountDto);
         return ResponseEntity.ok().build();
     }

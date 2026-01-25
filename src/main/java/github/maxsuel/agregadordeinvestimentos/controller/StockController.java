@@ -5,6 +5,7 @@ import github.maxsuel.agregadordeinvestimentos.service.StockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class StockController {
     @Operation(summary = "Register a new stock.", description = "Adds a ticker (ex: PETR4) to the system's database.")
     @ApiResponse(responseCode = "200", description = "Stock successfully registered.")
     @PostMapping
-    public ResponseEntity<Void> createStock(@RequestBody CreateStockDto createStockDto) {
+    public ResponseEntity<Void> createStock(@Valid @RequestBody CreateStockDto createStockDto) {
         stockService.createStock(createStockDto);
 
         return ResponseEntity.ok().build();

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AccountController {
     })
     @PostMapping(path = "/{accountId}/stocks")
     public ResponseEntity<Void> associateStock(@PathVariable("accountId") String accountId,
-                                               @RequestBody AssociateAccountStockDto dto) {
+                                               @Valid @RequestBody AssociateAccountStockDto dto) {
         accountService.associateStock(accountId, dto);
 
         return ResponseEntity.ok().build();
