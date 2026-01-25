@@ -40,7 +40,7 @@ public class UserService {
             createUserDto.username(), 
             createUserDto.email(),
             passwordEncoder.encode(createUserDto.password()),
-            Role.BASIC
+            Role.ADMIN
         );
 
         var userSaved = userRepository.save(entity);
