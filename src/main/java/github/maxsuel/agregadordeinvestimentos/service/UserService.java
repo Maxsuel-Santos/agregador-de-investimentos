@@ -12,6 +12,7 @@ import github.maxsuel.agregadordeinvestimentos.entity.BillingAddress;
 import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
 import github.maxsuel.agregadordeinvestimentos.repository.AccountRepository;
 import github.maxsuel.agregadordeinvestimentos.repository.BillingAddressRepository;
+import lombok.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserById(String userId, UpdateUserDto updateUserDto) {
+    public void updateUserById(String userId, @NonNull UpdateUserDto updateUserDto) {
         var userUuid = UUID.fromString(userId);
 
         var user = userRepository.findById(userUuid)
@@ -70,11 +71,11 @@ public class UserService {
         }
 
         if (updateUserDto.password() != null) {
-            user.setPassword(updateUserDto.password());
+            user.setPassword(passwordEncoder.encode(updateUserDto.password()));
         }
 
         userRepository.save(user);
-        log.info("User updated with ID: {}", userId);
+        log.info("User updated with ID: {}. Password re-hashed.", userId);
     }
 
     public void deleteUser(String userId) {
