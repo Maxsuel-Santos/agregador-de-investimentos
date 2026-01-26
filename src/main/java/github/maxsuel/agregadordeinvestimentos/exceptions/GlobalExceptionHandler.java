@@ -78,4 +78,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotFound(UserNotFoundException ex) {
+        log.error("User not found: {}", ex.getMessage());
+
+        var errorResponse = new ErrorResponseDto(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                Instant.now(),
+                null
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }
