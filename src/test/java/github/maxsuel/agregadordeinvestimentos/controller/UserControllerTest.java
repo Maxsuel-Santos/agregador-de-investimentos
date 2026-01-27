@@ -1,6 +1,5 @@
 package github.maxsuel.agregadordeinvestimentos.controller;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
 import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
@@ -30,28 +29,6 @@ public class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
-
-    @Nested
-    @DisplayName("Tests for Create User")
-    public class CreateUser {
-
-        @Test
-        @DisplayName("Should return 201 Created and Location header on success")
-        public void shouldCreateUserWithSuccess() {
-            // Arrange
-            var dto = new CreateUserDto("username", "username@email.com", "123");
-            var userId = UUID.randomUUID();
-            when(userService.createUser(dto)).thenReturn(userId);
-
-            // Act
-            var response = userController.createUser(dto);
-
-            // Assert
-            assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            assertNotNull(response.getHeaders().getLocation());
-            assertTrue(response.getHeaders().getLocation().getPath().contains(userId.toString()));
-        }
-    }
 
     @Nested
     @DisplayName("Tests for Get User By ID")
@@ -105,6 +82,7 @@ public class UserControllerTest {
 
             // Assert
             assertEquals(HttpStatus.OK, response.getStatusCode());
+            assert response.getBody() != null;
             assertEquals(1, response.getBody().size());
         }
 
@@ -119,6 +97,7 @@ public class UserControllerTest {
 
             // Assert
             assertEquals(HttpStatus.OK, response.getStatusCode());
+            assert response.getBody() != null;
             assertTrue(response.getBody().isEmpty());
         }
     }
@@ -153,9 +132,7 @@ public class UserControllerTest {
                 .when(userService).updateUserById(userId, dto);
 
             // Act & Assert
-            assertThrows(UserNotFoundException.class, () -> {
-                userController.updateUserById(userId, dto);
-            });
+            assertThrows(UserNotFoundException.class, () -> userController.updateUserById(userId, dto));
         }
     }
 

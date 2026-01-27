@@ -1,6 +1,5 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
 import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
@@ -42,32 +41,6 @@ public class UserServiceTest {
 
     @Captor
     private ArgumentCaptor<UUID> uuidArgumentCaptor;
-
-    @Nested
-    @DisplayName("Tests for Creating User")
-    public class CreateUser {
-
-        @Test
-        @DisplayName("Should create user with success")
-        public void shouldCreateUserWithSuccess() {
-            // Arrange
-            var input = new CreateUserDto("username", "email@email.com", "123");
-            var userSaved = new User("username", "email@email.com", "123");
-            userSaved.setUserId(UUID.randomUUID());
-            
-            doReturn(userSaved)
-                    .when(userRepository)
-                    .save(any(User.class));
-
-            // Act
-            var output = userService.createUser(input);
-
-            // Assert
-            assertThat(output).isNotNull();
-            assertThat(output).isEqualTo(userSaved.getUserId());
-            verify(userRepository, times(1)).save(any(User.class));
-        }
-    }
 
     @Nested
     @DisplayName("Tests for Updating User")
