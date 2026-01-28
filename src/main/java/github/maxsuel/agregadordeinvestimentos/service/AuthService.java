@@ -46,7 +46,7 @@ public class AuthService {
     @Transactional
     public LoginResponseDto login(@NonNull LoginDto dto) {
         var user = userRepository.findByUsername(dto.username())
-                .orElseThrow(() -> new UserNotFoundException("User not found."));
+                .orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("Invalid username or password"));
 
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             throw new org.springframework.security.authentication.BadCredentialsException("Invalid username or password");
