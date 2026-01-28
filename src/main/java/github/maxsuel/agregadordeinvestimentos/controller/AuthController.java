@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import github.maxsuel.agregadordeinvestimentos.dto.AuthResponseDto;
 import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
 import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
-import github.maxsuel.agregadordeinvestimentos.dto.LoginResponseDto;
 import github.maxsuel.agregadordeinvestimentos.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,9 +32,9 @@ public class AuthController {
     @Operation(summary = "Create/Register a new user.")
     @ApiResponse(responseCode = "201", description = "User created/registered successfully.")
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@Valid @RequestBody CreateUserDto createUserDto) {
-        var userId = authService.register(createUserDto);
-        return ResponseEntity.created(URI.create("/users/" + userId.toString())).build();
+    public ResponseEntity<AuthResponseDto> register(@Valid @RequestBody CreateUserDto createUserDto) {
+        var registerResponse = authService.register(createUserDto);
+        return ResponseEntity.created(URI.create("/users/" + registerResponse.user().userId())).body(registerResponse);
     }
 
     @Operation(summary = "Log in and receive the JWT token.",
@@ -45,7 +45,7 @@ public class AuthController {
                 description = "Login successfully", 
                 content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = LoginResponseDto.class)
+                    schema = @Schema(implementation = AuthResponseDto.class)
                 )   
             ),
             @ApiResponse(
@@ -55,7 +55,7 @@ public class AuthController {
             )
     })
     @PostMapping(path = "/login")
-    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
         var loginResponse = authService.login(loginDto);
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }

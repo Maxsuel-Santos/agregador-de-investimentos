@@ -19,9 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import github.maxsuel.agregadordeinvestimentos.dto.AuthResponseDto;
 import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
 import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
-import github.maxsuel.agregadordeinvestimentos.dto.LoginResponseDto;
 import github.maxsuel.agregadordeinvestimentos.service.AuthService;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +43,8 @@ public class AuthControllerTest {
             // Arrange
             var dto = new CreateUserDto("username", "username@email.com", "123");
             var userId = UUID.randomUUID();
-            when(authService.register(dto)).thenReturn(userId);
+            var userResponse = new AuthResponseDto("fake-jwt-token", null); // Fake token and user
+            when(authService.register(dto)).thenReturn(userResponse);
 
             // Act
             var response = authController.register(dto);
@@ -64,16 +65,16 @@ public class AuthControllerTest {
         public void shouldLoginWithSuccess() {
             // Arrange
             var loginDto = new LoginDto("username", "123");
-            var mockToken = new LoginResponseDto("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."); // Fake token
+            var userResponse = new AuthResponseDto("fake-jwt-token", null); // Fake token and user
 
-            when(authService.login(loginDto)).thenReturn(mockToken);
+            when(authService.login(loginDto)).thenReturn(userResponse);
 
             // Act
             var response = authController.login(loginDto);
 
             // Assert
             assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals(mockToken, response.getBody());
+            assertEquals(userResponse, response.getBody());
 
             verify(authService, times(1)).login(loginDto);
         }

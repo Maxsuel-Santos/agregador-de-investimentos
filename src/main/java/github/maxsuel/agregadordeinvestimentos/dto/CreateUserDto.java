@@ -16,8 +16,8 @@ public record CreateUserDto(
     String username,
 
     @Schema(
-        description = "Valid email address of the user",
-        example = "john_doe@email.com"
+        description = "User email address",
+        example = "johndoe@email.com"
     )
     @NotBlank(message = "Email is required.")
     @Email(message = "The email address must be valid.")

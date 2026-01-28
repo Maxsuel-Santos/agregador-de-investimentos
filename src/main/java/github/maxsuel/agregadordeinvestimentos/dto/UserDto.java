@@ -1,0 +1,33 @@
+package github.maxsuel.agregadordeinvestimentos.dto;
+import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Represents the authenticated user")
+public record UserDto(
+
+    @Schema(
+        description = "Unique identifier of the user",
+        example = "a3f1c2e4-9b7d-4c1e-8f3a-12ab34cd56ef"
+    )
+    String userId,
+
+    @Schema(
+        description = "Unique username used to identify the user in the system",
+        example = "john_doe"
+    )
+    String username,
+
+    @Schema(
+        description = "User email address",
+        example = "johndoe@email.com"
+    )
+    String email,
+
+    @Schema(
+        description = "Role or profile assigned to the user",
+        example = "ADMIN"
+    )
+    Role role
+
+) {}
+
