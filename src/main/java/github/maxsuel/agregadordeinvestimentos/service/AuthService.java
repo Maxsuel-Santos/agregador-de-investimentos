@@ -1,5 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
+import github.maxsuel.agregadordeinvestimentos.exceptions.DuplicatedDataException;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,12 +29,21 @@ public class AuthService {
 
     @Transactional
     public AuthResponseDto register(@NonNull CreateUserDto createUserDto) {
+        if (userRepository.existsByUsername(createUserDto.username())) {
+            throw new DuplicatedDataException("The username already exists.");
+        }
+
+        if (userRepository.existsByEmail(createUserDto.email())) {
+            throw new DuplicatedDataException("Email already registered");
+        }
+
         var entity = new User(
                 createUserDto.username(),
                 createUserDto.email(),
                 passwordEncoder.encode(createUserDto.password()),
                 Role.ADMIN
         );
+
 
         var userSaved = userRepository.save(entity);
 

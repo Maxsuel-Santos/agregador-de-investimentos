@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({BadCredentialsException.class, UserNotFoundException.class})
-    public ResponseEntity<ErrorResponseDto> handleAuthErrors(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleAuthErrors(@NonNull Exception ex) {
         log.warn("Authentication failure: {}", ex.getMessage());
 
         var errorResponse = new ErrorResponseDto(
@@ -90,5 +90,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 null
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(DuplicatedDataException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicatedData(@NonNull DuplicatedDataException ex) {
+        var errorResponse = new ErrorResponseDto(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                Instant.now(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }
