@@ -2,6 +2,7 @@ package github.maxsuel.agregadordeinvestimentos.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Data required to authenticate a user and generate a JWT access token.")
 public record LoginDto(
@@ -11,6 +12,7 @@ public record LoginDto(
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotBlank(message = "Username cannot be empty")
+        @NotNull(message = "Username cannot be null.")
         String username,
 
         @Schema(
@@ -20,6 +22,7 @@ public record LoginDto(
                 format = "password"
         )
         @NotBlank(message = "Password cannot be empty")
+        @NotNull(message = "Password cannot be null.")
         String password
 ) {
 }

@@ -13,6 +13,7 @@ public record CreateAccountDto(
         example = "Carteira de dividendos"
     )
     @NotBlank(message = "Account description is required.")
+    @NotNull(message = "Account description cannot be null.")
     String description,
 
     @Schema(
@@ -20,6 +21,7 @@ public record CreateAccountDto(
         example = "Avenida Paulista"
     )
     @NotBlank(message = "The street name is required.")
+    @NotNull(message = "The street name cannot be null.")
     String street,
 
     @Schema(

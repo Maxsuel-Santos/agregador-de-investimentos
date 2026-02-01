@@ -3,6 +3,7 @@ package github.maxsuel.agregadordeinvestimentos.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Schema(description = "Request payload to create a new user")
@@ -13,6 +14,7 @@ public record CreateUserDto(
         example = "john_doe"
     )
     @NotBlank(message = "Username is required.")
+    @NotNull(message = "Username cannot be null.")
     String username,
 
     @Schema(
@@ -20,6 +22,7 @@ public record CreateUserDto(
         example = "johndoe@email.com"
     )
     @NotBlank(message = "Email is required.")
+    @NotNull(message = "Email cannot be null.")
     @Email(message = "The email address must be valid.")
     String email,
 
@@ -28,6 +31,7 @@ public record CreateUserDto(
         example = "password#123"
     )
     @NotBlank(message = "Password is mandatory.")
+    @NotNull(message = "Password cannot be null.")
     @Size(min = 8, message = "The password must be at least 8 characters long.")
     String password
 ) {
