@@ -1,14 +1,13 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import github.maxsuel.agregadordeinvestimentos.dto.AccountResponseDto;
 import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
-import github.maxsuel.agregadordeinvestimentos.entity.Account;
 import github.maxsuel.agregadordeinvestimentos.entity.BillingAddress;
+import github.maxsuel.agregadordeinvestimentos.mapper.AccountMapper;
 import github.maxsuel.agregadordeinvestimentos.repository.AccountRepository;
 import github.maxsuel.agregadordeinvestimentos.repository.BillingAddressRepository;
 import lombok.NonNull;
@@ -32,6 +31,7 @@ public class UserService {
     private final AccountRepository accountRepository;
     private final BillingAddressRepository billingAddressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountMapper accountMapper;
 
     public Optional<User> getUserById(String userId) {
         return userRepository.findById(UUID.fromString(userId));
@@ -79,22 +79,18 @@ public class UserService {
         var user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
 
-        var account = new Account(
-                user,
-                createAccountDto.description(),
-                new ArrayList<>()
-        );
-
-        var accountCreated = accountRepository.save(account);
+        var account = accountMapper.toEntity(createAccountDto, user);
+        var accountSaved = accountRepository.save(account);
 
         var billingAddress = new BillingAddress(
-                accountCreated.getAccountId(),
-                account,
+                accountSaved.getAccountId(),
+                accountSaved,
                 createAccountDto.street(),
                 createAccountDto.number()
         );
 
         billingAddressRepository.save(billingAddress);
+        log.info("Account and BillingAddress created for user: {}", userId);
     }
 
     public List<AccountResponseDto> listAllAccounts(String userId) {
@@ -105,7 +101,5 @@ public class UserService {
                 .stream()
                 .map(ac -> new AccountResponseDto(ac.getAccountId().toString(), ac.getDescription()))
                 .toList();
-
-
     }
 }
