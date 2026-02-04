@@ -34,5 +34,6 @@ public record UserDto(
     @NotNull
     Role role
 
-) {}
+) {
 
+}

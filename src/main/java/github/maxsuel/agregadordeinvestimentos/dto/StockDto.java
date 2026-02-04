@@ -1,15 +1,29 @@
 package github.maxsuel.agregadordeinvestimentos.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Stock market data returned by the external Brapi API")
 public record StockDto(
+
+    @JsonProperty("symbol")
+    @Schema(
+            description = "Unique identifier (ticker symbol) of the stock",
+            example = "PETR4"
+    )
+    String stock,
 
     @Schema(
         description = "Short display name of the company or stock",
         example = "Petrobras PN"
     )
     String shortName,
+
+    @Schema(
+            description = "Long display name of the company or stock",
+            example = "Petroleo Brasileiro SA Pfd"
+    )
+    String longName,
 
     @Schema(
         description = "Current market price of the stock",

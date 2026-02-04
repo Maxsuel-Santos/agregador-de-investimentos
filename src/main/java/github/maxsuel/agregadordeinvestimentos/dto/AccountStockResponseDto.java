@@ -22,6 +22,13 @@ public record AccountStockResponseDto(
 
     @NotNull
     @Schema(
+        description = "Full name of the company issuing the stock",
+        example = "Banco Itaú Unibanco PN"
+    )
+    String longName,
+
+    @NotNull
+    @Schema(
         description = "Total quantity of the stock in the portfolio",
         example = "100"
     )

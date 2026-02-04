@@ -107,12 +107,13 @@ public class AuthController {
         description = "Unauthorized - invalid or missing JWT token"
     )
     @GetMapping("/me")
-    public UserDto me(@AuthenticationPrincipal User user) {
-        return new UserDto(
-            user.getUserId().toString(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getRole()
-        );
+    public ResponseEntity<UserDto> me(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var userDto = authService.getAuthenticatedUserDto(user);
+
+        return ResponseEntity.ok(userDto);
     }
 }

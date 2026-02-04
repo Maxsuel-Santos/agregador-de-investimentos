@@ -33,3 +33,5 @@ build/
 .vscode/
 
 mise.toml
+
+application.properties

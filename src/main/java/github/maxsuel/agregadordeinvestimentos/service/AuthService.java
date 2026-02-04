@@ -1,6 +1,7 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
 import github.maxsuel.agregadordeinvestimentos.exceptions.DuplicatedDataException;
+import github.maxsuel.agregadordeinvestimentos.mapper.UserMapper;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +13,6 @@ import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
 import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
 import github.maxsuel.agregadordeinvestimentos.dto.UserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
-import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
 import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Transactional
     public AuthResponseDto register(@NonNull CreateUserDto createUserDto) {
@@ -37,25 +38,14 @@ public class AuthService {
             throw new DuplicatedDataException("Email already registered");
         }
 
-        var entity = new User(
-                createUserDto.username(),
-                createUserDto.email(),
-                passwordEncoder.encode(createUserDto.password()),
-                Role.ADMIN
-        );
-
+        String encodedPassword = passwordEncoder.encode(createUserDto.password());
+        User entity = userMapper.toEntity(createUserDto, encodedPassword);
 
         var userSaved = userRepository.save(entity);
-
         log.info("User created with ID: {} and type {}", userSaved.getUserId(), userSaved.getRole());
 
-        var token = tokenService.generateToken(entity);
-        UserDto userDto = new UserDto(
-                userSaved.getUserId().toString(),
-                userSaved.getUsername(),
-                userSaved.getEmail(),
-                userSaved.getRole()
-        );
+        var token = tokenService.generateToken(userSaved);
+        UserDto userDto = userMapper.toDto(userSaved);
 
         return new AuthResponseDto(token, userDto);
     }
@@ -69,15 +59,18 @@ public class AuthService {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        UserDto userDto = new UserDto(
-                user.getUserId().toString(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole()
-        );
-
+        UserDto userDto = userMapper.toDto(user);
         var token = tokenService.generateToken(user);
+
         return new AuthResponseDto(token, userDto);
+    }
+
+    public UserDto getAuthenticatedUserDto(User user) {
+        if (user == null) {
+            throw new BadCredentialsException("User not authenticated");
+        }
+
+        return userMapper.toDto(user);
     }
 
 }

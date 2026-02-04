@@ -2,6 +2,7 @@ package github.maxsuel.agregadordeinvestimentos.controller;
 
 import java.util.List;
 
+import github.maxsuel.agregadordeinvestimentos.dto.AccountBalanceDto;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,12 +77,16 @@ public class AccountController {
         )
     )
     @GetMapping(path = "/{accountId}/stocks")
-    public ResponseEntity<List<AccountStockResponseDto>> listAllStocks(
-        @PathVariable("accountId") String accountId
-    ) {
+    public ResponseEntity<List<AccountStockResponseDto>> listAllStocks(@PathVariable("accountId") String accountId) {
         var stocks = accountService.listAllStocks(accountId);
 
         return ResponseEntity.ok(stocks);
+    }
+
+    @Operation(summary = "Get account total balance", description = "Calculates the sum of all stocks in the account based on real-time Brapi prices.")
+    @GetMapping("/{accountId}/balance")
+    public ResponseEntity<AccountBalanceDto> getBalance(@PathVariable String accountId) {
+        return ResponseEntity.ok(accountService.getAccountBalance(accountId));
     }
 
 }

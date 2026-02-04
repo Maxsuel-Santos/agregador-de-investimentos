@@ -21,6 +21,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_investimentos
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root123
-      
+
 volumes:
   db_data:

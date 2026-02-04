@@ -24,7 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("agregador-investimentos-api")
                     .withSubject(user.getUsername())
-                    .withClaim("role", user.getRole().name()) // Mantemos a claim
+                    .withClaim("role", user.getRole().name())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

@@ -1,0 +1,30 @@
+package github.maxsuel.agregadordeinvestimentos.mapper;
+
+import github.maxsuel.agregadordeinvestimentos.dto.AccountStockResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.StockDto;
+import github.maxsuel.agregadordeinvestimentos.entity.AccountStock;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+@Mapper(componentModel = "spring")
+public interface AccountStockMapper {
+
+    @Mapping(target = "stockId", source = "accountStock.stock.stockId")
+    @Mapping(target = "name", source = "stockDto.shortName")
+    @Mapping(target = "longName", source = "stockDto.longName")
+    @Mapping(target = "quantity", source = "accountStock.quantity")
+    @Mapping(target = "price", source = "stockDto.regularMarketPrice")
+    @Mapping(target = "total", expression = "java(calculateTotal(accountStock.getQuantity(), stockDto.regularMarketPrice()))")
+    @Mapping(target = "logoUrl", source = "stockDto.logourl")
+    AccountStockResponseDto toDto(AccountStock accountStock, StockDto stockDto);
+
+    default double calculateTotal(double quantity, double price) {
+        double totalRaw = quantity * price;
+        return BigDecimal.valueOf(totalRaw)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+    }
+}
