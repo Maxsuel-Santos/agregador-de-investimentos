@@ -17,7 +17,6 @@ public class CorsConfig {
 
         config.setAllowedOrigins(List.of(
             "http://localhost:5173"
-            // Add other allowed origins as needed
         ));
 
         config.setAllowedMethods(List.of(
@@ -29,8 +28,7 @@ public class CorsConfig {
             "Content-Type"
         ));
 
-        // config.setAllowCredentials(true); // if you need to allow cookies/auth credentials
-        config.setMaxAge(3600L); // Cache pre-flight response for 1 hour
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source =
             new UrlBasedCorsConfigurationSource();
