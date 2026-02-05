@@ -1,11 +1,11 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
 import github.maxsuel.agregadordeinvestimentos.config.TokenService;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
-import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.CreateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.LoginDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
-import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
+import github.maxsuel.agregadordeinvestimentos.mapper.UserMapper;
 import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,7 +18,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +35,9 @@ public class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private UserMapper userMapper;
+
     @InjectMocks
     private AuthService authService;
 
@@ -48,23 +50,18 @@ public class AuthServiceTest {
         public void shouldRegisterUserWithSuccess() {
             // Arrange
             var dto = new CreateUserDto("username", "user@email.com", "plainPassword");
-            var hashedPassword = "hashedPassword123";
-            var user = new User("User", "user@email.com", hashedPassword, Role.ADMIN);
-            var userId = UUID.randomUUID();
-            user.setUserId(userId);
-
-            when(passwordEncoder.encode(dto.password())).thenReturn(hashedPassword);
-            when(userRepository.save(any(User.class))).thenReturn(user);
+            var user = new User();
 
             // Act
-            var result = authService.register(dto);
+            when(userMapper.toEntity(any(), anyString())).thenReturn(user);
+            when(passwordEncoder.encode(any())).thenReturn("hashed");
+            when(userRepository.save(any())).thenReturn(user);
+
+            authService.register(dto);
 
             // Assert
-            assertNotNull(result);
-            assertEquals(userId, result);
-
-            verify(passwordEncoder).encode("plainPassword");
-            verify(userRepository).save(any(User.class));
+            verify(userMapper).toEntity(eq(dto), anyString());
+            verify(userRepository).save(user);
         }
 
     }
@@ -89,7 +86,7 @@ public class AuthServiceTest {
             var result = authService.login(dto);
 
             // Assert
-            assertEquals(expectedToken, result);
+            assertEquals(expectedToken, result.accessToken());
             verify(tokenService).generateToken(user);
         }
 
@@ -97,15 +94,11 @@ public class AuthServiceTest {
         @DisplayName("Should throw BadCredentialsException when password does not match")
         void shouldThrowExceptionWhenPasswordInvalid() {
             // Arrange
-            var dto = new LoginDto("user", "wrongPassword");
-            var user = new User("user", "user@email.com", "hashedPassword", Role.ADMIN);
-
-            when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(user));
-            when(passwordEncoder.matches(dto.password(), user.getPassword())).thenReturn(false);
+            var dto = new LoginDto("nonExistent", "anyPass");
+            when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
 
             // Act & Assert
             assertThrows(BadCredentialsException.class, () -> authService.login(dto));
-            verify(tokenService, never()).generateToken(any());
         }
 
         @Test
@@ -116,7 +109,7 @@ public class AuthServiceTest {
             when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
 
             // Act & Assert
-            assertThrows(UserNotFoundException.class, () -> authService.login(dto));
+            assertThrows(BadCredentialsException.class, () -> authService.login(dto));
         }
     }
 

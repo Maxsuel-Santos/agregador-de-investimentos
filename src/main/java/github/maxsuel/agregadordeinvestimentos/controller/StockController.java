@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.controller;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateStockDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.stock.CreateStockDto;
 import github.maxsuel.agregadordeinvestimentos.service.StockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

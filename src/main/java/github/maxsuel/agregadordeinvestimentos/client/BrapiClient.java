@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.client;
 
-import github.maxsuel.agregadordeinvestimentos.dto.BrapiResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.external.brapi.BrapiResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.controller;
 
-import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.user.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
 import github.maxsuel.agregadordeinvestimentos.service.UserService;

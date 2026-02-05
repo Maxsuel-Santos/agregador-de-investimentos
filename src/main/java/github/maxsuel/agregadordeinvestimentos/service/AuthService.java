@@ -8,10 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import github.maxsuel.agregadordeinvestimentos.config.TokenService;
-import github.maxsuel.agregadordeinvestimentos.dto.AuthResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
-import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
-import github.maxsuel.agregadordeinvestimentos.dto.UserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.auth.AuthResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.CreateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.LoginDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.auth.UserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;
 import jakarta.transaction.Transactional;

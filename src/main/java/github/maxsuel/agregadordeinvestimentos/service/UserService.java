@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import github.maxsuel.agregadordeinvestimentos.dto.AccountResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
-import github.maxsuel.agregadordeinvestimentos.entity.BillingAddress;
+import github.maxsuel.agregadordeinvestimentos.dto.response.account.AccountResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.account.CreateAccountDto;
 import github.maxsuel.agregadordeinvestimentos.mapper.AccountMapper;
 import github.maxsuel.agregadordeinvestimentos.mapper.BillingAddressMapper;
 import github.maxsuel.agregadordeinvestimentos.repository.AccountRepository;
@@ -15,7 +14,7 @@ import lombok.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.user.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
 import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;

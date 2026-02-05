@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import github.maxsuel.agregadordeinvestimentos.dto.AccountResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
-import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.account.AccountResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.account.CreateAccountDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.user.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

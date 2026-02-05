@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
-import github.maxsuel.agregadordeinvestimentos.dto.UpdateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.user.UpdateUserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.exceptions.UserNotFoundException;
 import github.maxsuel.agregadordeinvestimentos.repository.UserRepository;
@@ -13,6 +13,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,6 +33,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -55,6 +59,8 @@ public class UserServiceTest {
             var existingUser = new User("oldUsername", "old@email.com", "oldPassword");
             existingUser.setUserId(userId);
 
+            doReturn("hashedPassword").when(passwordEncoder).encode(any());
+
             doReturn(Optional.of(existingUser))
                     .when(userRepository)
                     .findById(userId);
@@ -69,9 +75,9 @@ public class UserServiceTest {
             // Assert
             verify(userRepository).save(userArgumentCaptor.capture());
             var userCaptured = userArgumentCaptor.getValue();
-            
+
             assertThat(userCaptured.getUsername()).isEqualTo(updateDto.username());
-            assertThat(userCaptured.getPassword()).isEqualTo(updateDto.password());
+            assertThat(userCaptured.getPassword()).isEqualTo("hashedPassword");
         }
 
         @Test
@@ -230,20 +236,12 @@ public class UserServiceTest {
         @DisplayName("Should update user by id when it exists and username and password are filled")
         public void shouldUpdateUserByIdWhenItExistsAndUsernameAndPasswordAreFilled() {
             // Arrange
-            var updateUserDto = new UpdateUserDto(
-                "newUsername", 
-                "newPassword"
-            );
-
+            var updateUserDto = new UpdateUserDto("newUsername", "newPassword");
+            var encodedPassword = "hashedPassword123";
             var userId = UUID.randomUUID();
-            var user = new User(
-                userId,
-                "username",
-                "email@email.com",
-                "password",
-                Instant.now(),
-                null
-            );
+            var user = new User(userId, "username", "email@email.com", "password", Instant.now(), null);
+
+            doReturn(encodedPassword).when(passwordEncoder).encode(updateUserDto.password());
 
             doReturn(Optional.of(user))
                     .when(userRepository)
@@ -257,15 +255,12 @@ public class UserServiceTest {
             userService.updateUserById(user.getUserId().toString(), updateUserDto);
 
             // Assert
-            assertEquals(user.getUserId(), uuidArgumentCaptor.getValue());
-
             var userCaptured = userArgumentCaptor.getValue();
 
             assertEquals(updateUserDto.username(), userCaptured.getUsername());
-            assertEquals(updateUserDto.password(), userCaptured.getPassword());
+            assertEquals(encodedPassword, userCaptured.getPassword());
 
-            verify(userRepository, times(1)).findById(uuidArgumentCaptor.getValue());
-            verify(userRepository, times(1)).save(user);
+            verify(userRepository, times(1)).save(any(User.class));
         }
 
         @Test

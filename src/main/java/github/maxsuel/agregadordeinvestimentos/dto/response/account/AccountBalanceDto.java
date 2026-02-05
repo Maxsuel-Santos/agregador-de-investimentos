@@ -1,4 +1,4 @@
-package github.maxsuel.agregadordeinvestimentos.dto;
+package github.maxsuel.agregadordeinvestimentos.dto.response.account;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;

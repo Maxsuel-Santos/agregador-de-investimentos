@@ -1,4 +1,4 @@
-package github.maxsuel.agregadordeinvestimentos.dto;
+package github.maxsuel.agregadordeinvestimentos.dto.external.brapi;
 
 import java.util.List;
 

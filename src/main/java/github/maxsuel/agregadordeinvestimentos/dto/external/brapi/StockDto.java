@@ -1,4 +1,4 @@
-package github.maxsuel.agregadordeinvestimentos.dto;
+package github.maxsuel.agregadordeinvestimentos.dto.external.brapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

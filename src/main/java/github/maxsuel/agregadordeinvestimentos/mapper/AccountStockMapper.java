@@ -1,7 +1,7 @@
 package github.maxsuel.agregadordeinvestimentos.mapper;
 
-import github.maxsuel.agregadordeinvestimentos.dto.AccountStockResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.StockDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.account.AccountStockResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.external.brapi.StockDto;
 import github.maxsuel.agregadordeinvestimentos.entity.AccountStock;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.mapper;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateStockDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.stock.CreateStockDto;
 import github.maxsuel.agregadordeinvestimentos.entity.Stock;
 import org.mapstruct.Mapper;
 

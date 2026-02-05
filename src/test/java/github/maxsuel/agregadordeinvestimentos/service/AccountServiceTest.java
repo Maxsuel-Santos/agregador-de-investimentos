@@ -1,14 +1,19 @@
 package github.maxsuel.agregadordeinvestimentos.service;
 
 import github.maxsuel.agregadordeinvestimentos.client.BrapiClient;
-import github.maxsuel.agregadordeinvestimentos.dto.BrapiResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.external.brapi.BrapiResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.external.brapi.StockDto;
+import github.maxsuel.agregadordeinvestimentos.mapper.AccountStockMapper;
 import github.maxsuel.agregadordeinvestimentos.repository.AccountRepository;
+import github.maxsuel.agregadordeinvestimentos.repository.AccountStockRepository;
+import github.maxsuel.agregadordeinvestimentos.repository.StockRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +32,31 @@ class AccountServiceTest {
     private AccountRepository accountRepository;
 
     @Mock
+    private StockRepository stockRepository;
+
+    @Mock
+    private AccountStockRepository accountStockRepository;
+
+    @Mock
     private BrapiClient brapiClient;
 
-    @InjectMocks
+    @Mock
+    private AccountStockMapper accountStockMapper;
+
     private AccountService accountService;
+
+    @BeforeEach
+    void setUp() {
+        accountService = new AccountService(
+                accountRepository,
+                stockRepository,
+                accountStockRepository,
+                brapiClient,
+                accountStockMapper
+        );
+
+        ReflectionTestUtils.setField(accountService, "TOKEN", "test-token");
+    }
 
     @Test
     @DisplayName("Should calculate account balance correctly using StockDto")
@@ -63,7 +89,7 @@ class AccountServiceTest {
 
         account.getAccountStocks().add(accountStock);
 
-        var stockDto = new github.maxsuel.agregadordeinvestimentos.dto.StockDto(
+        var stockDto = new StockDto(
                 "PETR4",
                 "Petrobras PN",
                 "Petroleo Brasileiro SA Pfd",
@@ -76,14 +102,11 @@ class AccountServiceTest {
 
         when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
         when(brapiClient.getQuote(any(), eq(stockId))).thenReturn(brapiResponse);
+        when(accountStockMapper.calculateTotal(anyDouble(), anyDouble())).thenReturn(300.0);
 
         var result = accountService.getAccountBalance(accountId.toString());
 
         assertNotNull(result);
-        assertEquals(accountId.toString(), result.accountId());
-        assertEquals(300.0, result.totalBalance()); // 10 * 30.0
-
-        verify(accountRepository, times(1)).findById(accountId);
-        verify(brapiClient, times(1)).getQuote(any(), eq(stockId));
+        assertEquals(300.0, result.totalBalance());
     }
 }

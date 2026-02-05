@@ -1,4 +1,4 @@
-package github.maxsuel.agregadordeinvestimentos.dto;
+package github.maxsuel.agregadordeinvestimentos.dto.response.auth;
 import github.maxsuel.agregadordeinvestimentos.entity.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -35,5 +35,4 @@ public record UserDto(
     Role role
 
 ) {
-
 }

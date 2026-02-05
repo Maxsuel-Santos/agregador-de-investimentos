@@ -1,6 +1,6 @@
 package github.maxsuel.agregadordeinvestimentos.mapper;
 
-import github.maxsuel.agregadordeinvestimentos.dto.CreateAccountDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.account.CreateAccountDto;
 import github.maxsuel.agregadordeinvestimentos.entity.Account;
 import github.maxsuel.agregadordeinvestimentos.entity.BillingAddress;
 import org.mapstruct.Mapper;

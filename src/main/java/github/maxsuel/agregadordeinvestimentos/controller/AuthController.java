@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import github.maxsuel.agregadordeinvestimentos.dto.AuthResponseDto;
-import github.maxsuel.agregadordeinvestimentos.dto.CreateUserDto;
-import github.maxsuel.agregadordeinvestimentos.dto.LoginDto;
-import github.maxsuel.agregadordeinvestimentos.dto.UserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.auth.AuthResponseDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.CreateUserDto;
+import github.maxsuel.agregadordeinvestimentos.dto.request.auth.LoginDto;
+import github.maxsuel.agregadordeinvestimentos.dto.response.auth.UserDto;
 import github.maxsuel.agregadordeinvestimentos.entity.User;
 import github.maxsuel.agregadordeinvestimentos.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
